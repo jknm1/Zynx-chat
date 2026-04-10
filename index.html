@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Zynx Chat</title>
+  <style>
+    body {
+      background: black;
+      color: white;
+      font-family: Arial;
+      text-align: center;
+    }
+
+    h2 {
+      color: #ff2e88;
+      letter-spacing: 2px;
+    }
+
+    #messages {
+      height: 300px;
+      overflow-y: auto;
+      border: 1px solid #333;
+      margin: 10px;
+      padding: 10px;
+      background: #111;
+    }
+
+    input {
+      padding: 10px;
+      margin: 5px;
+      border: none;
+      background: #222;
+      color: white;
+    }
+
+    button {
+      padding: 10px;
+      background: #ff2e88;
+      border: none;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+
+<h2>ZYNX CHAT</h2>
+
+<input id="number" placeholder="Enter your number"><br>
+<div id="messages"></div>
+
+<input id="msg" placeholder="Type message">
+<button onclick="send()">Send</button>
+
+<script>
+let room = "";
+let storageKey = "";
+
+document.getElementById("number").addEventListener("change", function() {
+  room = this.value;
+  storageKey = "zynx_" + room;
+  loadMessages();
+});
+
+function send() {
+  const message = document.getElementById("msg").value;
+  if (!message) return;
+
+  let messages = JSON.parse(localStorage.getItem(storageKey)) || [];
+  messages.push(message);
+  localStorage.setItem(storageKey, JSON.stringify(messages));
+
+  document.getElementById("msg").value = "";
+  loadMessages();
+}
+
+function loadMessages() {
+  const messagesDiv = document.getElementById("messages");
+  messagesDiv.innerHTML = "";
+
+  let messages = JSON.parse(localStorage.getItem(storageKey)) || [];
+
+  messages.forEach(msg => {
+    const div = document.createElement("div");
+    div.innerText = msg;
+    messagesDiv.appendChild(div);
+  });
+}
+</script>
+
+</body>
+</html>
